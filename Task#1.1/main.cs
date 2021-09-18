@@ -2,72 +2,93 @@ using System;
 using System.Collections.Generic;
 
 class Program {
-  public class stringList {
-    string [] stringArray;
+  public class stringList
+  {
+    string[] stringArray;
     int len;
 
-    public stringList () {
-      this.len = 100;
-      this.stringArray = new string[100]; 
-    }
-    
-    public int Insert (string elem) {
-      
-      int i;
+    const int capacity = 100;
 
-      for (i = 0; i < len; i++) {
-        if ( String.IsNullOrEmpty(stringArray[i]) ) break;
+    public stringList()
+    {
+      len = 0;
+      stringArray = new string[capacity];
+    }
+
+    public int Insert(string elem)
+    {
+      if (len >= 100)
+      {
+        Console.WriteLine("Can't insert one more element");
+        
+        return 1;
       }
 
-      if (i == len) return 0;
-      
-      stringArray[i] = elem;
+      stringArray[len] = elem;
+      len++;
 
-      return 1;
-    }
-    
-    public void Delete (int num) {
-      
-      if (num >= len) return;
-
-      stringArray[num] = String.Empty;
-    }
-
-    public int Search (string elem) {
-
-      for (int i = 0; i < len; i++) 
-        if (stringArray[i] == elem) {
-          Console.WriteLine("Found string \""+elem+"\" at position "+ i);
-          return 1;
-        }
-      
-      Console.WriteLine("String \""+elem+"\" not found!");
       return 0;
     }
 
-    public void Update (int num, string elem) {
+    public void Delete (int index) {
+
+      if (index >= len)
+      {
+        Console.WriteLine("Can't delete element with this index");
+        
+        return;
+      }
       
-      if (num >= len) return;
-      
-      stringArray[num] = elem;
-    
+      for (int i = index; i < len - 1; ++i)
+      {
+        stringArray[i] = stringArray[i + 1];
+      }
     }
 
-    public string GetAt (int num) {
-    
-      if (num >= len) return "Fail";
-    
-      if (String.IsNullOrEmpty(stringArray[num])) return "no element";
+    public int Search(string elem)
+    {
+      for (int i = 0; i < len; i++)
+        if (stringArray[i] == elem)
+        {
+          Console.WriteLine("Found string \"" + stringArray[i] + "\" at position " + i);
+          return i;
+        }
 
-      return stringArray[num];
+      Console.WriteLine("String \"" + elem + "\" not found!");
+      return -1;
+    }
+
+    public void Update(int index, string elem)
+    {
+      if (index >= len)
+      {
+        return;
+      }
+      
+      stringArray[index] = elem;
+    }
+
+    public string GetAt (int index)
+    {
+      if (index >= len)
+      {
+        Console.WriteLine("out of bounds");
+        
+        return "";
+      }
+
+      return stringArray[index];
     }
 
     public void PrintAt (int g) {
-      Console.WriteLine ("#"+ g +": " + this.GetAt (g));
+      Console.WriteLine ("#"+ g +": " + GetAt(g));
     }
 
     public void Print () {
-        for (int i=0; i<this.len; i++) this.PrintAt(i);
+      for (int i = 0; i < this.len; i++)
+      {
+        PrintAt(i);
+      }
     }
   }
   
