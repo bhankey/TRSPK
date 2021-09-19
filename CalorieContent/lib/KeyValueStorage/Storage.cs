@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using System.Threading;
 
 namespace CalorieContent.lib.KeyValueStorage
@@ -26,7 +27,7 @@ namespace CalorieContent.lib.KeyValueStorage
 
         private void OpenFile()
         {
-            db = File.Open(_pathToFile, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+            db = File.Open(_pathToFile, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read);
         }
 
         public bool TryGetString(string key, out string value)
