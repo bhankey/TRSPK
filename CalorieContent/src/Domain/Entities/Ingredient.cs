@@ -1,15 +1,37 @@
 ﻿using System;
+using System.IO;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+using Microsoft.VisualBasic.CompilerServices;
 
 namespace CalorieContent.Domain.Entities
 {
     public class Ingredient
     {
+        public Ingredient()
+        {
+            Name = "";
+            _calorieContentPerHundredGrams = 0;
+        }
+        
+        public Ingredient(string name, double calorieContentPerHundredGrams)
+        {
+            Name = name;
+            CalorieContentPerHundredGrams = calorieContentPerHundredGrams;
+        }
+        
+        public Ingredient(Ingredient copy)
+        {
+            Name = copy.Name;
+            _calorieContentPerHundredGrams = copy._calorieContentPerHundredGrams;
+        }
+        
         
         public string Name { get; set; }
 
         private double _calorieContentPerHundredGrams;
         
-        private double CalorieContentPerHundredGrams
+        public double CalorieContentPerHundredGrams
         {
             get => _calorieContentPerHundredGrams;
             set
@@ -18,11 +40,10 @@ namespace CalorieContent.Domain.Entities
                 {
                     throw new Exception("wrong value in setter of Ingredient.CalorieContentPerHundredGrams");
                 }
-                
+
                 _calorieContentPerHundredGrams = value;
             }
         }
-        
-        
     }
+    
 }
