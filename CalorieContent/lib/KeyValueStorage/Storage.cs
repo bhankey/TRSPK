@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading;
@@ -7,36 +8,40 @@ namespace CalorieContent.lib.KeyValueStorage
 {
     public class Storage : IStorage
     {
-        private FileStream db = null;
-
-        private string _pathToFile;
-
-        private static Mutex _mutex = new Mutex();
-
-        public Storage(string pathToFile)
+        private const int CountOfDataBases = 2;
+        
+        private const string _basePathToFile = "C:\\Users\\Sergey\\RiderProjects\\TRSPK\\CalorieContent\\DB";
+       
+        
+        private static FileStream[] db = new FileStream[CountOfDataBases];
+        
+        private static Mutex[] _mutex = new Mutex[CountOfDataBases];
+        
+        static Storage()
         {
-            _pathToFile =  pathToFile;
-            OpenFile();
+            for (var i = 0; i < CountOfDataBases; i++)
+            {
+                db[i] = File.Open(_basePathToFile + i, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read);
+                _mutex[i] = new Mutex();
+            }
         }
 
-        ~Storage()
+        public void DestroyStorage()
         {
-            db.Flush();
-            db.Close();
+            for (var i = 0; i < CountOfDataBases; i++)
+            {
+                db[i].Flush();
+                db[i].Close();
+            }
         }
-
-        private void OpenFile()
-        {
-            db = File.Open(_pathToFile, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read);
-        }
-
-        public bool TryGetString(string key, out string value)
+        
+        public bool TryGetString(int DBNum, string key, out string value)
         {
             try
             {
-                _mutex.WaitOne();
+                _mutex[DBNum].WaitOne();
 
-                var reader = new StreamReader(db);
+                var reader = new StreamReader(db[DBNum]);
 
                 string line;
                 while ((line = reader.ReadLine()) != null)
@@ -55,9 +60,9 @@ namespace CalorieContent.lib.KeyValueStorage
             }
             finally
             {
-                db.Seek(0, SeekOrigin.Begin);
+                db[DBNum].Seek(0, SeekOrigin.Begin);
                 
-                _mutex.ReleaseMutex();
+                _mutex[DBNum].ReleaseMutex();
             }
         }
         private static bool ValidateQuotes(in string line, out string unQuotedString)
@@ -95,36 +100,36 @@ namespace CalorieContent.lib.KeyValueStorage
             return true;
         }
 
-        public void SetString(string key, string value)
+        public void SetString(int DBNum, string key, string value)
         {
             try
             {
-                _mutex.WaitOne();
+                _mutex[DBNum].WaitOne();
 
-                InternalTryDelete(key);
+                InternalTryDelete(DBNum ,key);
                 
-                var writer = new StreamWriter(db);
+                var writer = new StreamWriter(db[DBNum]);
 
-                long endPoint = db.Length;
+                long endPoint = db[DBNum].Length;
 
-                db.Seek(endPoint, SeekOrigin.Begin);
+                db[DBNum].Seek(endPoint, SeekOrigin.Begin);
                 writer.WriteLine("\"{0}\":\"{1}\"", key, value);
                 writer.Flush();
             }
             finally
             {
-                db.Seek(0, SeekOrigin.Begin);
+                db[DBNum].Seek(0, SeekOrigin.Begin);
                 
-                _mutex.ReleaseMutex();
+                _mutex[DBNum].ReleaseMutex();
             }
         }
 
-        private bool InternalTryDelete(string key)
+        private bool InternalTryDelete(int DBNum, string key)
         {
-            var reader = new StreamReader(db);
+            var reader = new StreamReader(db[DBNum]);
 
             var isDeleted = false;
-            using (var tmpWriter = new StreamWriter(_pathToFile + "tmp"))
+            using (var tmpWriter = new StreamWriter(_basePathToFile + DBNum + "tmp"))
             {
                 string line;
                 while ((line = reader.ReadLine()) != null)
@@ -144,28 +149,61 @@ namespace CalorieContent.lib.KeyValueStorage
                     tmpWriter.WriteLine(line);
                 }
                 
-                db.Close();
-                File.Delete(_pathToFile);
+                db[DBNum].Close();
+                File.Delete(_basePathToFile + DBNum);
                 tmpWriter.Close();
-                File.Move( _pathToFile + "tmp", _pathToFile);
+                File.Move( _basePathToFile + DBNum + "tmp", _basePathToFile + DBNum);
             }
             
-            OpenFile();
+            OpenFile(DBNum);
 
             return isDeleted;
         }
 
-        public bool TryDelete(string key)
+        private void OpenFile(int DBNum)
+        {
+            db[DBNum] = File.Open(_basePathToFile + DBNum, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read);
+        }
+
+        public bool TryDelete(int DBNum, string key)
         {
             try
             {
-                _mutex.WaitOne();
+                _mutex[DBNum].WaitOne();
 
-                return InternalTryDelete(key);
+                return InternalTryDelete(DBNum, key);
             }
             finally
             {
-                _mutex.ReleaseMutex();
+                _mutex[DBNum].ReleaseMutex();
+            }
+        }
+
+        public Dictionary<string, string> GetAllStrings(int DBNum)
+        {
+            try
+            {
+                _mutex[DBNum].WaitOne();
+                var map = new Dictionary<string, string>();
+
+                string line;
+                var reader = new StreamReader(db[DBNum]);
+                while ((line = reader.ReadLine()) != null)
+                {
+                    var success = TryParseString(line, out string dataKey, out string dataValue);
+                    if (!success)
+                    {
+                        continue;
+                    }
+
+                    map[dataKey] = dataValue;
+                }
+
+                return map;
+            }
+            finally
+            {
+                _mutex[DBNum].ReleaseMutex();
             }
         }
     }
