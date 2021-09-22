@@ -5,16 +5,9 @@ namespace CalorieContent.Domain.Mapper
 {
     public static class IngredientMapper
     {
-        public static Ingredient StringToIngredient(string value)
+        public static Ingredient StringToIngredient(string name, string value)
         {
-            var values = value.Trim().Split(';');
-
-            if (value.Length != 2)
-            {
-                throw new Exception("wrong string in constructor of Ingredient");
-            }
-
-            return new Ingredient(values[0], int.Parse(values[1]));
+            return new Ingredient(name, int.Parse(value.Trim()));
         }
         
         public static string IngredientToString(Ingredient value)

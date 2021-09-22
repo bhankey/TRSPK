@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using CalorieContent.Core.Repositories.Base;
 using CalorieContent.Domain.Entities;
@@ -9,27 +10,31 @@ using CalorieContent.lib.KeyValueStorage;
 
 namespace CalorieContent.Core.Repositories
 {
-    public class IngredientRepo: IRepository<Ingredient>
+    public class IngredientRepo: IIngredientRepo
     {
         private const int IngredientDB = (int) DBNumbers.Ingredient; 
         
-        private readonly Storage _storage;
+        private readonly IStorage _storage;
 
-        public IngredientRepo(Storage storage)
+        public IngredientRepo(IStorage storage)
         {
             _storage = storage ?? throw new Exception("empty storage receive");
         }
         
-        public Task<Ingredient> Get(string name)
+        public Ingredient Get(string name)
         {
             _storage.TryGetString(IngredientDB, name, out string value);
             
-            return Task.FromResult(IngredientMapper.StringToIngredient(value));
+            return IngredientMapper.StringToIngredient(name, value);
         }
 
-        public Task<Dictionary<string, string> > GetAll()
+        public Dictionary<string, Ingredient> GetAll()
         {
-           return new Task<Dictionary<string, string>>(() => _storage.GetAllStrings(IngredientDB));
+            var values = _storage.GetAllStrings(IngredientDB);
+
+            var result = values.ToDictionary(value => value.Key, value => IngredientMapper.StringToIngredient(value.Key, value.Value));
+
+            return result;
         }
 
         public void Set(Ingredient entity)
@@ -37,9 +42,9 @@ namespace CalorieContent.Core.Repositories
             _storage.SetString(IngredientDB, entity.Name, entity.CalorieContentPerHundredGrams.ToString());
         }
 
-        public Task<bool> Delete(string name)
+        public bool Delete(string name)
         {
-            return new Task<bool>(() => _storage.TryDelete(IngredientDB, name));
+            return _storage.TryDelete(IngredientDB, name);
         }
     }
 }

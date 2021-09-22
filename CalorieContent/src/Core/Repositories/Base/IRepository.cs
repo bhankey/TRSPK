@@ -5,11 +5,10 @@ namespace CalorieContent.Core.Repositories.Base
 {
     public interface IRepository <T> where T: class
     {
-        // Чтобы получить из таска нужный объект
-        public Task <T> Get(string name);
-        public Task<Dictionary<string, string>> GetAll();
+        public T Get(string name);
+        public Dictionary<string, T> GetAll();
         public void Set(T entity);
-        public Task<bool> Delete(string name);
+        public bool Delete(string name);
 
     }
 }
