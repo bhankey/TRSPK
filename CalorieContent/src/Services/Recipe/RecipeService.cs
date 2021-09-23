@@ -5,15 +5,35 @@ using CalorieContent.Services.Recipe.Models;
 
 namespace CalorieContent.Services.Recipe
 {
-    public class RecipeService: IRecipeService
+    public class RecipeService : IRecipeService
     {
-        private readonly IRecipeRepo _recipeRepo;
         private readonly IIngredientRepo _ingredientRepo;
+        private readonly IRecipeRepo _recipeRepo;
 
         public RecipeService(IRecipeRepo recipeRepo, IIngredientRepo ingredientRepo)
         {
             _recipeRepo = recipeRepo;
             _ingredientRepo = ingredientRepo;
+        }
+
+        public Domain.Entities.Recipe GetItem(string item)
+        {
+            return _recipeRepo.Get(item);
+        }
+
+        public Dictionary<string, Domain.Entities.Recipe> GetAll()
+        {
+            return _recipeRepo.GetAll();
+        }
+
+        public void Set(Domain.Entities.Recipe entity)
+        {
+            _recipeRepo.Set(entity);
+        }
+
+        public bool Delete(string name)
+        {
+            return _recipeRepo.Delete(name);
         }
 
         public RecipeDetailDTO DescribeRecipe(string name)
@@ -46,10 +66,7 @@ namespace CalorieContent.Services.Recipe
             {
                 var description = DescribeRecipe(recipe.Key);
 
-                if (description.SummaryCalories <= sumCalorie)
-                {
-                    resultingRecipes.Add(recipe.Value);
-                }
+                if (description.SummaryCalories <= sumCalorie) resultingRecipes.Add(recipe.Value);
             }
 
             return resultingRecipes;
@@ -60,49 +77,21 @@ namespace CalorieContent.Services.Recipe
             var allRecipes = _recipeRepo.GetAll();
 
             var recipesByIngredients = new Dictionary<string, Domain.Entities.Recipe>();
-            
+
             foreach (var (recipeName, recipe) in allRecipes)
             {
                 var recipeIngredients = new List<string>();
-                
-                foreach (var recipeIngredient in recipe.Ingredients)
-                {
-                    recipeIngredients.Add(recipeIngredient.Name);
-                }
+
+                foreach (var recipeIngredient in recipe.Ingredients) recipeIngredients.Add(recipeIngredient.Name);
 
                 if (recipeIngredients.Intersect(ingredients).Count() >= ingredients.Count)
-                {
                     recipesByIngredients.Add(recipeName, recipe);
-                }
             }
 
             var result = new List<RecipeDetailDTO>(recipesByIngredients.Count);
-            foreach (var recipe in recipesByIngredients)
-            {
-                result.Add(DescribeRecipe(recipe.Key));
-            }
+            foreach (var recipe in recipesByIngredients) result.Add(DescribeRecipe(recipe.Key));
 
             return result;
-        }
-        
-        public Domain.Entities.Recipe GetItem(string item)
-        {
-            return _recipeRepo.Get(item);
-        }
-
-        public Dictionary<string, Domain.Entities.Recipe> GetAll()
-        {
-            return _recipeRepo.GetAll();
-        }
-
-        public void Set(Domain.Entities.Recipe entity)
-        {
-            _recipeRepo.Set(entity);
-        }
-
-        public bool Delete(string name)
-        {
-            return _recipeRepo.Delete(name);
         }
     }
 }

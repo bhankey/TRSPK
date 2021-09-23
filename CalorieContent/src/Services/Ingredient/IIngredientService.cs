@@ -2,8 +2,7 @@
 
 namespace CalorieContent.Services.Ingredient
 {
-    public interface IIngredientService: IService<Domain.Entities.Ingredient>
+    public interface IIngredientService : IService<Domain.Entities.Ingredient>
     {
-        
     }
 }

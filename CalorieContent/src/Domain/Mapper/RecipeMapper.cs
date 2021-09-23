@@ -11,9 +11,7 @@ namespace CalorieContent.Domain.Mapper
             var values = value.Trim().Split(';');
 
             if (values.Length < 2 || values.Length % 2 != 0)
-            {
                 throw new Exception("wrong string in constructor of Recipe");
-            }
 
 
             var ingredients = new RecipeIngredient[values.Length / 2];

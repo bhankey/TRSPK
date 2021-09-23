@@ -2,8 +2,7 @@
 
 namespace CalorieContent.Services.Recipe
 {
-    public interface IRecipeService: IService<Domain.Entities.Recipe>
+    public interface IRecipeService : IService<Domain.Entities.Recipe>
     {
-        
     }
 }

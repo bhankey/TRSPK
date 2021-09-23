@@ -1,5 +1,4 @@
-﻿using System;
-using CalorieContent.Domain.Entities;
+﻿using CalorieContent.Domain.Entities;
 
 namespace CalorieContent.Domain.Mapper
 {
@@ -9,7 +8,7 @@ namespace CalorieContent.Domain.Mapper
         {
             return new Ingredient(name, int.Parse(value.Trim()));
         }
-        
+
         public static string IngredientToString(Ingredient value)
         {
             return value.Name + ":" + value.CalorieContentPerHundredGrams;

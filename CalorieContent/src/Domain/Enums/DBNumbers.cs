@@ -1,8 +1,8 @@
 ﻿namespace CalorieContent.Domain.Enums
 {
-    public enum DBNumbers: int
+    public enum DBNumbers
     {
         Ingredient = 0,
-        Recipe = 1,
+        Recipe = 1
     }
 }

@@ -3,8 +3,7 @@ using CalorieContent.Domain.Entities;
 
 namespace CalorieContent.Core.Repositories
 {
-    public interface IIngredientRepo: IRepository<Ingredient>
+    public interface IIngredientRepo : IRepository<Ingredient>
     {
-        
     }
 }

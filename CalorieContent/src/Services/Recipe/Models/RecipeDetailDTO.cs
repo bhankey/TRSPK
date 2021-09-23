@@ -5,17 +5,13 @@ namespace CalorieContent.Services.Recipe.Models
 {
     public class RecipeDetailDTO
     {
-        public string RecipeName;
-
         // Dictionary: Name - calorie
         public Dictionary<string, double> IngredientCalorie;
+        public string RecipeName;
 
         public double SummaryCalories
         {
-            get
-            {
-                return IngredientCalorie.Sum(ingredient => ingredient.Value);
-            }
+            get { return IngredientCalorie.Sum(ingredient => ingredient.Value); }
         }
     }
 }
