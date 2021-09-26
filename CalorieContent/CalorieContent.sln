@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalorieContent", "CalorieContent.csproj", "{CC6DDE52-D8EB-4C9F-ABB3-83009F11BE87}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalorieContentMain", "CalorieContentMain\CalorieContentMain.csproj", "{CC6DDE52-D8EB-4C9F-ABB3-83009F11BE87}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

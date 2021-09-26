@@ -8,7 +8,7 @@ namespace CalorieContent.lib.KeyValueStorage
     {
         private const int CountOfDataBases = 2;
 
-        private const string _basePathToFile = "C:\\Users\\Sergey\\RiderProjects\\TRSPK\\CalorieContent\\DB";
+        private const string _basePathToFile = "C:\\Users\\Sergey\\Documents\\Charps\\TRSPK\\CalorieContent\\CalorieContentMain\\DB\\DB";
 
 
         private static readonly FileStream[] db = new FileStream[CountOfDataBases];
