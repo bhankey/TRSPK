@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalorieContentMain", "CalorieContentMain\CalorieContentMain.csproj", "{CC6DDE52-D8EB-4C9F-ABB3-83009F11BE87}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebMVC", "WebMVC\WebMVC.csproj", "{D5E872A7-3C3B-4AF1-B295-3AB653BF54DA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{CC6DDE52-D8EB-4C9F-ABB3-83009F11BE87}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC6DDE52-D8EB-4C9F-ABB3-83009F11BE87}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC6DDE52-D8EB-4C9F-ABB3-83009F11BE87}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5E872A7-3C3B-4AF1-B295-3AB653BF54DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5E872A7-3C3B-4AF1-B295-3AB653BF54DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5E872A7-3C3B-4AF1-B295-3AB653BF54DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5E872A7-3C3B-4AF1-B295-3AB653BF54DA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
