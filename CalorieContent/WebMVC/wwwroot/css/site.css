@@ -88,3 +88,6 @@ body {
   flex: 50%;
 }
 
+.result {
+  text-align: left;
+}

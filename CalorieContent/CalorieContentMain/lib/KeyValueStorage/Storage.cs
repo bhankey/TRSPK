@@ -28,6 +28,8 @@ namespace CalorieContent.lib.KeyValueStorage
         {
             try
             {
+                db[DBNum].Seek(0, SeekOrigin.Begin);
+                
                 _mutex[DBNum].WaitOne();
 
                 var reader = new StreamReader(db[DBNum]);
@@ -37,7 +39,10 @@ namespace CalorieContent.lib.KeyValueStorage
                 {
                     var isSucceed = TryParseString(line, out var dataKey, out value);
 
-                    if (isSucceed && dataKey == key) return true;
+                    if (isSucceed && dataKey == key)
+                    {
+                        return true;
+                    }
                 }
 
                 value = null;
@@ -56,6 +61,8 @@ namespace CalorieContent.lib.KeyValueStorage
         {
             try
             {
+                db[DBNum].Seek(0, SeekOrigin.Begin);
+                
                 _mutex[DBNum].WaitOne();
 
                 InternalTryDelete(DBNum, key);
@@ -80,6 +87,8 @@ namespace CalorieContent.lib.KeyValueStorage
         {
             try
             {
+                db[DBNum].Seek(0, SeekOrigin.Begin);
+                
                 _mutex[DBNum].WaitOne();
 
                 return InternalTryDelete(DBNum, key);
@@ -94,6 +103,8 @@ namespace CalorieContent.lib.KeyValueStorage
         {
             try
             {
+                db[DBNum].Seek(0, SeekOrigin.Begin);
+                
                 _mutex[DBNum].WaitOne();
                 var map = new Dictionary<string, string>();
 

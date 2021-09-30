@@ -17,6 +17,8 @@ namespace CalorieContent.Domain.Mapper
             var ingredients = new RecipeIngredient[values.Length / 2];
             for (var i = 0; i < values.Length; i += 2)
             {
+                ingredients[i / 2] = new RecipeIngredient();
+                
                 ingredients[i / 2].Name = values[i];
                 ingredients[i / 2].Grams = int.Parse(values[i + 1]);
             }

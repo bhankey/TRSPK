@@ -25,6 +25,11 @@ namespace CalorieContent.Domain.Entities
     {
         private double _grams;
 
+        public RecipeIngredient()
+        {
+            
+        }
+        
         public RecipeIngredient(string name, double grams)
         {
             Name = name;

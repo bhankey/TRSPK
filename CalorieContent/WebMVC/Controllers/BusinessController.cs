@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using CalorieContent.Services.Recipe;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using WebMVC.Models;
@@ -14,6 +16,13 @@ namespace WebMVC.Controllers
 {
     public class BusinessController : Controller
     {
+        private enum serviceType
+        {
+            RecipeDetails = 1,
+            LowerCalorieContentThan = 2,
+            ConsistOf = 3,
+        }
+        
         private readonly IRecipeService RecipeService;
 
         public BusinessController(IRecipeService recipeService)
@@ -22,11 +31,105 @@ namespace WebMVC.Controllers
         }
         
         // GET: /Business
-        public IActionResult Index(int? id, string Input, int? ServiceType)
+        public IActionResult Index(int? id, string input, int? choose)
         {
-            var d = RecipeService.GetItem("database");
-            ViewData["Message"] = $"Hello + {Input} + {ServiceType} + {d}";
-            Console.WriteLine($"{{id}},{Input}, {ServiceType}\n");
+            if (choose == null || string.IsNullOrEmpty(input))
+            {
+                return View();
+            }
+
+            var serviceType = (serviceType)choose;
+            
+            switch (serviceType)
+            {
+                case serviceType.RecipeDetails:
+                {
+                    var recipe = RecipeService.DescribeRecipe(input);
+
+                    StringBuilder result = new StringBuilder();
+
+                    result.Append("Recipe name: ");
+                    result.Append(recipe.RecipeName);
+                    result.Append("\n");
+
+                    result.Append("Ingredients: \n");
+                    foreach (var i in recipe.IngredientCalorie)
+                    {
+                        result.Append("\t");
+                        result.Append(i.Key);
+                        result.Append(" - ");
+                        result.Append(i.Value);
+                        result.Append(" calorie\n");
+                    }
+
+                    ViewData["ResultOfService"] = result.ToString();
+                    
+                    break;   
+                }
+                case serviceType.LowerCalorieContentThan:
+                {
+                    var recipes = RecipeService.GetLessSumCalorie(int.Parse(input));
+
+                    var result = new StringBuilder();
+                    foreach (var recipe in recipes)
+                    {
+                        result.Append("Recipe name: ");
+                        result.Append(recipe.Name);
+                        result.Append("\n");
+
+                        result.Append("Ingredients: \n");
+                        foreach (var ingredient in recipe.Ingredients)
+                        {
+                            result.Append("\t");
+                            result.Append(ingredient.Name);
+                            result.Append(" - ");
+                            result.Append(ingredient.Grams);
+                            result.Append(" grams\n");
+                        }
+                    }
+                    
+                    if (recipes.Count == 0)
+                    {
+                        result.Append("No recipes lower than that calorie: " + int.Parse(input));
+                    }
+
+                    ViewData["ResultOfService"] = result.ToString();
+                    
+                    break;
+                }
+                case serviceType.ConsistOf:
+                {
+                    var recipes = RecipeService.GetRecipesByIngredients(new List<String>(input.Split(',')));
+
+                    StringBuilder result = new StringBuilder();
+                    foreach (var recipe in recipes)
+                    {
+                        result.Append("Recipe name: ");
+                        result.Append(recipe.RecipeName);
+                        result.Append("\n");
+
+                        result.Append("Ingredients: \n");
+                        foreach (var i in recipe.IngredientCalorie)
+                        {
+                            result.Append("\t");
+                            result.Append(i.Key);
+                            result.Append(" - ");
+                            result.Append(i.Value);
+                            result.Append(" calorie\n");
+                        }
+
+                    }
+                    
+                    if (recipes.Count == 0)
+                    {
+                        result.Append("No recipes consist of this ingredients: " + input.Split(','));
+                    }
+                    
+                    ViewData["ResultOfService"] = result.ToString();
+                    
+                    break;
+                }
+            }
             return View();
         }
         

@@ -1,4 +1,6 @@
-﻿@{
+﻿@using CalorieContent.Services.Recipe.Models
+@using Microsoft.AspNetCore.Authentication
+@{
     ViewData["Title"] = "Работа с бизнес логикой";
 }
 
@@ -8,18 +10,22 @@
     <form asp-action="" method="get">
         <div class="interactive">
             <div class="input_form">
-                <input type="text" id="Input" name="Input" value="Пельмени"/>
+                <input type="text" id="input" name="input" value="пельмени"/>
             </div>
             <div class="selection">
-                <p align="left"><input type="radio" id="ServiceType" name="ServiceType" value="0"/>Детали о блюде</p>
-                <p align="left"><input type="radio" id="ServiceType" name="ServiceType" value="1"/>Калорийностью ниже чем</p>
-                <p align="left"><input type="radio" id="ServiceType" name="ServiceType" value="2"/>Блюда из ингредиентов (введите ингредиенты через запятую)</p>
+                <p align="left"><input type="radio" id="choose" name="choose" value="1"/>Детали о блюде</p>
+                <p align="left"><input type="radio" id="choose" name="choose" value="2"/>Калорийностью ниже чем</p>
+                <p align="left"><input type="radio" id="choose" name="choose" value="3"/>Блюда из ингредиентов (введите ингредиенты через запятую)</p>
             </div>
         </div>
     </form>
     <div>
-        <p>Results</p>
-        <p>@ViewData["Message"]</p>
+        @{
+            if (!String.IsNullOrEmpty((String)ViewData["ResultOfService"]))
+            {
+                <p>Results</p>
+                <pre class="result" >@ViewData["ResultOfService"]</pre>
+            }
+         }
     </div>
-    
 </div>

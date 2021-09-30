@@ -9,6 +9,11 @@ namespace CalorieContent.Services.Recipe.Models
         public Dictionary<string, double> IngredientCalorie;
         public string RecipeName;
 
+        public RecipeDetailDTO()
+        {
+            IngredientCalorie = new Dictionary<string, double>();
+        }
+
         public double SummaryCalories
         {
             get { return IngredientCalorie.Sum(ingredient => ingredient.Value); }

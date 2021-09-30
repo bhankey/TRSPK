@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using CalorieContent.Core.Repositories;
 using CalorieContent.Services.Recipe.Models;
@@ -47,13 +48,20 @@ namespace CalorieContent.Services.Recipe
             result.RecipeName = name;
             foreach (var ingredient in recipe.Ingredients)
             {
-                var recipeIngredient = allIngredients[ingredient.Name];
-
-                result.IngredientCalorie.Add(
-                    recipeIngredient.Name,
-                    recipeIngredient.CalorieContentPerHundredGrams / 100 * ingredient.Grams);
+                try
+                {
+                    var recipeIngredient = allIngredients[ingredient.Name];
+                    result.IngredientCalorie.Add(
+                        recipeIngredient.Name,
+                        recipeIngredient.CalorieContentPerHundredGrams / 100 * ingredient.Grams);
+                }
+                catch
+                {
+                    throw new Exception("no ingredient in DB for this recipe: " + ingredient.Name +
+                                        ", name of recipe: " + recipe.Name);
+                }
             }
-
+            
             return result;
         }
 
@@ -74,6 +82,14 @@ namespace CalorieContent.Services.Recipe
 
         public List<RecipeDetailDTO> GetRecipesByIngredients(List<string> ingredients)
         {
+            for (var i = 0; i < ingredients.Count; i++)
+            {
+                if (ingredients[i] == "")
+                {
+                    ingredients.RemoveAt(i);
+                }
+            }
+            
             var allRecipes = _recipeRepo.GetAll();
 
             var recipesByIngredients = new Dictionary<string, Domain.Entities.Recipe>();
