@@ -1,7 +1,11 @@
 using System;
 
+
+
+
+class Program {
+  
   public class El {
-    
     public string name; // доступ понадобится индексеру
     public int val;
 
@@ -10,54 +14,95 @@ using System;
       val = n;
     }
     
-    public override bool Equals(Object obj_to_compare) { 
-    // 1 требование индексера Array.IndexOf (метод)
-    // virtual method from Object
-        
-    string name_to_compare = (string) obj_to_compare; // это чтоб сравнить имя 
-    return (obj_to_compare != null) && (this.name == name_to_compare);
-    }
-
-    public override int GetHashCode() { 
-    // 2 требование индексера Array.IndexOf (метод)
+    public override int GetHashCode() {
       return HashCode.Combine(name, val);
-    // создается hashcode имени и значения
     }
+    
+    public override bool Equals(object obj)
+    {
+      if (ReferenceEquals(null, obj)) return false;
+      if (ReferenceEquals(this, obj)) return true;
+      if (obj.GetType() != this.GetType()) return false;
+      return name == ((El)(obj)).name && val == ((El)(obj)).val;
+    }
+    
   }
 
 
-class Program {
+  public class ArrEl
+  {
+    public El[] Array;
+    private int _size;
+    private int _capacity;
+    
+    
+    public ArrEl(int size)
+    {
+      Array = new El[size];
+      _capacity = size;
+      _size = 0;
+    }
+    
+    public El this[int i]
+    {
+      get => Array[i];
+      set => Array[i] = value;
+    }
+
+    public El this[string name]
+    {
+      get
+      {
+        foreach (var el in Array)
+        {
+          if (el.name == name)
+          {
+            return el;
+          }
+        }
+
+        throw new Exception("No element in array");
+      }
+      
+      set
+      {
+        for (var i = 0; i < Array.Length; i++)
+        {
+          if (Array[i].name == name)
+          {
+            Array[i] = value;
+            
+            return;
+          }
+        }
+        
+        throw new Exception("Can not install not existed value by name");
+      }
+
+    }
+  }
 
   public static void SwapInt(ref int a, ref int b) { // static т.к. это функция не принадлежащая какому-то объекту 
-  
-    // это простой надежный метод обмена через временную переменную
-    //int t;
-
-    //t = a;
-    //a = b;
-    //b = t;
-
-    // это обмен используя кортеж - не требует временной переменной, но есть не во всех версиях C#
     (a,b)=(b,a);
   }
 
-  public static void Main (string[] args) {
+  public static void Main (string[] args)
+  {
 
-    El[] ArrEl = new El[3];
+    var arrEl = new ArrEl(5);
 
-    ArrEl[0] = new El("zero",0); // доступ к элементам массива по обычному индексу
-    ArrEl[1] = new El("one",1);
-    ArrEl[2] = new El("two",2);
+    arrEl[0] = new El("zero",0); // доступ к элементам массива по обычному индексу
+    arrEl[1] = new El("one",1);
+    arrEl[2] = new El("two",2);
+
+    Console.WriteLine("При поиске по индексу {0}:{1}", arrEl[0].name, arrEl[0].val);
     
-    string name_to_find = "zero";
-    int index = Array.IndexOf( ArrEl, name_to_find);  // поиск индекса элемента по имени
-
-    Console.WriteLine("При поиске по имени :" + name_to_find);
-    Console.WriteLine("функция индекс по имени вернула результат :" + index);
+    Console.WriteLine("При поиске по имени {0}:{1}", arrEl["one"].name, arrEl["one"].val);
 
     Console.WriteLine();
     
 //-----------------------------------------------------------------------------------
+
     Console.WriteLine ("Обмен 2 переменных при помощи ref:");
     int a=1111, b=2222;
 
