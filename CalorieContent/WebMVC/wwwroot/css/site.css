@@ -90,4 +90,10 @@ body {
 
 .result {
   text-align: left;
+  margin-bottom: 2%;
 }
+
+.wrapper {
+  display: grid;
+}
+

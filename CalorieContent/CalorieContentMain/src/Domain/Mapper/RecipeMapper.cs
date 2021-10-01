@@ -35,9 +35,29 @@ namespace CalorieContent.Domain.Mapper
                 result.Append(t.Name);
                 result.Append(';');
                 result.Append(t.Grams);
+                result.Append(';');
             }
 
             result.Append('\"');
+            return result.ToString();
+        }
+        
+        public static string ValueRecipeToString(Recipe value)
+        {
+            var result = new StringBuilder();
+
+            for (var index = 0; index < value.Ingredients.Length; index++)
+            {
+                var t = value.Ingredients[index];
+                result.Append(t.Name);
+                result.Append(';');
+                result.Append(t.Grams);
+                if (index != value.Ingredients.Length - 1)
+                {
+                    result.Append(';');
+                }
+            }
+
             return result.ToString();
         }
     }

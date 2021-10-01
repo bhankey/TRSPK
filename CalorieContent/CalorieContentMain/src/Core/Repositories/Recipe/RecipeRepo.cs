@@ -39,7 +39,7 @@ namespace CalorieContent.Core.Repositories
 
         public void Set(Recipe entity)
         {
-            _storage.SetString(RecipeDB, entity.Name, RecipeMapper.RecipeToString(entity));
+            _storage.SetString(RecipeDB, entity.Name, RecipeMapper.ValueRecipeToString(entity));
         }
 
         public bool Delete(string name)
