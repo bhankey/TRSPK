@@ -375,7 +375,11 @@ namespace LongNumber
                 : Substract(a, b);
 
         //вычитание
-        public static LongNumber operator -(LongNumber a, LongNumber b) => (a + -b);
+        public static LongNumber operator -(LongNumber a, LongNumber b)
+        {
+            LongNumber q = b;
+            return a + -q;
+        }
 
         //умножение
         public static LongNumber operator *(LongNumber a, LongNumber b) => Multiply(a, b);
@@ -409,9 +413,21 @@ namespace LongNumber
     {
         static void Main(string[] args)
         {
-            LongNumber a = new LongNumber(6);
+            LongNumber a = new LongNumber(10);
             LongNumber b = new LongNumber(-12);
             LongNumber c = b / a;
+
+            for (int i = 0; i < 10; i++)
+            {
+                a *= new LongNumber(1000);
+                Console.WriteLine(i);
+            }
+            
+            for (int i = 0; i < 10; i++)
+            {
+                a /= new LongNumber(1000);
+                Console.WriteLine(i);
+            }
 
             Console.WriteLine($"Value a: {a}, value b: {b}, value c: {c}");
             c = a + b;
