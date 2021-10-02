@@ -1,14 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using CalorieContent.Core.Repositories;
-using CalorieContent.Domain.Entities;
 using CalorieContent.lib.KeyValueStorage;
+using CalorieContent.Repositories.Ingredient;
+using CalorieContent.Repositories.Recipe;
 using CalorieContent.Services.Recipe;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

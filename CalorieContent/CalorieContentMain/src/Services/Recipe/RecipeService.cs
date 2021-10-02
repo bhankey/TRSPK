@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CalorieContent.Core.Repositories;
+using CalorieContent.Repositories.Ingredient;
+using CalorieContent.Repositories.Recipe;
 using CalorieContent.Services.Recipe.Models;
 
 namespace CalorieContent.Services.Recipe

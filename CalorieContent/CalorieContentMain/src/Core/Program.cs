@@ -1,6 +1,6 @@
 ﻿using System;
-using CalorieContent.Core.Repositories;
 using CalorieContent.lib.KeyValueStorage;
+using CalorieContent.Repositories.Ingredient;
 
 namespace CalorieContent.Core
 {

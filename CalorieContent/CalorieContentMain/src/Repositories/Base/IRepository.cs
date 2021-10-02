@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace CalorieContent.Core.Repositories.Base
+namespace CalorieContent.Repositories.Base
 {
     public interface IRepository<T> where T : class
     {

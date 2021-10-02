@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using CalorieContent.Core.Repositories;
+using CalorieContent.Repositories.Ingredient;
 
 namespace CalorieContent.Services.Ingredient
 {

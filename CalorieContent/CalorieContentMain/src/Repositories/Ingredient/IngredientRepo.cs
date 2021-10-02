@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CalorieContent.Domain.Entities;
 using CalorieContent.Domain.Enums;
 using CalorieContent.Domain.Mapper;
 using CalorieContent.lib.KeyValueStorage;
 
-namespace CalorieContent.Core.Repositories
+namespace CalorieContent.Repositories.Ingredient
 {
     public class IngredientRepo : IIngredientRepo
     {
@@ -19,14 +18,14 @@ namespace CalorieContent.Core.Repositories
             _storage = storage ?? throw new Exception("empty storage receive");
         }
 
-        public Ingredient Get(string name)
+        public Domain.Entities.Ingredient Get(string name)
         {
             _storage.TryGetString(IngredientDB, name, out var value);
 
             return IngredientMapper.StringToIngredient(name, value);
         }
 
-        public Dictionary<string, Ingredient> GetAll()
+        public Dictionary<string, Domain.Entities.Ingredient> GetAll()
         {
             var values = _storage.GetAllStrings(IngredientDB);
 
@@ -36,7 +35,7 @@ namespace CalorieContent.Core.Repositories
             return result;
         }
 
-        public void Set(Ingredient entity)
+        public void Set(Domain.Entities.Ingredient entity)
         {
             _storage.SetString(IngredientDB, entity.Name, entity.CalorieContentPerHundredGrams.ToString());
         }
