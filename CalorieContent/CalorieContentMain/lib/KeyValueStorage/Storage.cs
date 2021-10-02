@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 
@@ -24,7 +25,7 @@ namespace CalorieContent.lib.KeyValueStorage
             }
         }
 
-        public bool TryGetString(int DBNum, string key, out string value)
+        public void GetString(int DBNum, string key, out string value)
         {
             try
             {
@@ -41,13 +42,13 @@ namespace CalorieContent.lib.KeyValueStorage
 
                     if (isSucceed && dataKey == key)
                     {
-                        return true;
+                        return;
                     }
                 }
 
                 value = null;
 
-                return false;
+                throw new Exception(String.Format("No data in DB by \"{0}\" key was not found. Number of DB [{1}]", key, DBNum));
             }
             finally
             {

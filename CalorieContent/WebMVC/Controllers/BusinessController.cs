@@ -132,8 +132,5 @@ namespace WebMVC.Controllers
             }
             return View();
         }
-        
-        // GET: /Business/Action
-
     }
 }

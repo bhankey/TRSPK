@@ -1,21 +1,22 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using CalorieContent.Domain.Mapper;
 using CalorieContent.Services.Recipe;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using WebMVC.Models;
 
 namespace WebMVC.Controllers
 {
     public class DataRecipeController: Controller
     {
-        private readonly IRecipeService RecipeService;
+        private readonly IRecipeService _recipeService;
 
         public DataRecipeController(IRecipeService recipeService)
         {
-            RecipeService = recipeService;
+            _recipeService = recipeService;
         }
         
-        // GET: /Business
         public IActionResult Index(int? id)
         {
             return View();
@@ -24,25 +25,32 @@ namespace WebMVC.Controllers
         [HttpPost]
         public ActionResult ShowOne(string? data)
         {
+            var result = new ResultViewModel();
+            
             if (data == null)
             {
-                return View("Index");
+                result.Error = "Введены не валидные данные";
+                
+                return View("Index", result);
             }
-
-            var recipe = RecipeService.GetItem(data);
-
-            var builder = new StringBuilder();
-            builder.Append("Название рецепта: " + recipe.Name + "\n");
-            builder.Append("Ингридиенты:\n");
-            foreach (var ingredient in recipe.Ingredients)
+            
+            try
             {
-                builder.Append("\t" + ingredient.Name + " : " +
-                               ingredient.Grams.ToString() + "г\n");
+                var recipe = _recipeService.GetItem(data);
+
+                var builder = new StringBuilder();
+                builder.Append("Название рецепта: " + recipe.Name + "\n");
+                builder.Append("Ингридиенты:\n");
+                foreach (var ingredient in recipe.Ingredients)
+                {
+                    builder.Append("\t" + ingredient.Name + " : " +
+                                   ingredient.Grams.ToString() + "г\n");
+                }
             }
-
-            var result = new ResultViewModel();
-
-            result.Result = builder.ToString();
+            catch (Exception e)
+            {
+                result.Error = e.Message;
+            }
             
             return View("Index", result);
         }
@@ -50,58 +58,86 @@ namespace WebMVC.Controllers
         [HttpPost]
         public ActionResult ShowAll()
         {
-            var recipes = RecipeService.GetAll();
-
-            var builder = new StringBuilder();
-
-            foreach (var recipe in recipes)
-            {
-                builder.Append("Название рецепта: " + recipe.Key + "\n");
-                builder.Append("Ингридиенты:\n");
-                foreach (var ingredient in recipe.Value.Ingredients)
-                {
-                    builder.Append("\t" + ingredient.Name + " : " +
-                                   ingredient.Grams.ToString() + "г\n");
-                }
-            }
-            
             var result = new ResultViewModel();
 
-            result.Result = builder.ToString();
+            try
+            {
+                var recipes = _recipeService.GetAll();
+
+                var builder = new StringBuilder();
+
+                foreach (var recipe in recipes)
+                {
+                    builder.Append("Название рецепта: " + recipe.Key + "\n");
+                    builder.Append("Ингридиенты:\n");
+                    foreach (var ingredient in recipe.Value.Ingredients)
+                    {
+                        builder.Append("\t" + ingredient.Name + " : " +
+                                       ingredient.Grams.ToString() + "г\n");
+                    }
+                }
+
+                result.Result = builder.ToString();
+            }
+            catch (Exception e)
+            {
+                result.Error = e.Message;
+            }
 
             return View("Index", result);
         }
         
+        [HttpPost] 
         public ActionResult Edit(string? recipeName, string? ingredientsString)
         {
+            var result = new ResultViewModel();
+            
             if (recipeName == null || ingredientsString == null)
             {
-                return View("Index");
+                result.Error = "Введены не валидные данные";
+                
+                return View("Index", result);
+            }
+
+            try
+            {
+                _recipeService.Set(RecipeMapper.StringToRecipe(recipeName, ingredientsString));
+
+                result.Result = "successful";
+            }
+            catch (Exception e)
+            {
+                result.Error = e.Message;
+            }
+
+            return View("Index", result);
+        }
+
+        [HttpPost]
+        public ActionResult Delete(string? recipeName)
+        {
+            var result = new ResultViewModel();
+            
+            if (recipeName == null)
+            {
+                result.Error = "Введены не валидные данные";
+                
+                return View("Index", result);
             }
             
-            RecipeService.Set(RecipeMapper.StringToRecipe(recipeName, ingredientsString));
-
-            var result = new ResultViewModel();
-
-            result.Result = "successful";
-
+            try
+            {
+                var status = _recipeService.Delete(recipeName);
+                
+                result.Result = status ? "Успешно" : "Не существует записи с введенным именем";
+            }
+            catch (Exception e)
+            {
+                result.Error = e.Message;
+            }
             return View("Index", result);
         }
         
-        public ActionResult Delete(string? recipeName)
-        {
-            if (recipeName == null)
-            {
-                return View("Index");
-            }
-            
-            var status = RecipeService.Delete(recipeName);
-
-            var result = new ResultViewModel();
-
-            result.Result = status? "Успешно": "Не успешно";
-
-            return View("Index", result);
-        }
     }
+    
 }

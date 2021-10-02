@@ -7,25 +7,25 @@
 <div class="text-center">
     <h1 class="display-4">Ингридиенты</h1>
     <h2>Работа с данными</h2>
-    
+
     <div class="wrapper">
         <div class="result">
-        <p>1. Отображение одного элемента</p>
-        @using (Html.BeginForm("ShowOne", "DataRecipe"))
-        {
-            <input type="text" name="data" placeholder="название рецепта"/>
+            <p>1. Отображение одного элемента</p>
+            @using (Html.BeginForm("ShowOne", "DataRecipe"))
+            {
+                <input type="text" name="data" placeholder="название рецепта"/>
                 <input type="submit"/>
-        }
+            }
         </div>
 
         <div class="result">
-        <p>2. Отображение всех записей</p>
-        @using (Html.BeginForm("ShowAll", "DataRecipe"))
-        {
-            <input type="submit"/>
-        }
+            <p>2. Отображение всех записей</p>
+            @using (Html.BeginForm("ShowAll", "DataRecipe"))
+            {
+                <input type="submit"/>
+            }
         </div>
-        
+
         <div class="result">
             <p>3. Редактирование записи</p>
             @using (Html.BeginForm("Edit", "DataRecipe"))
@@ -36,7 +36,7 @@
                 <p>Вводите данные о ингридиентах чере ";" в формате название;сколько_грамм;название;сколько_грамм </p>
             }
         </div>
-        
+
         <div class="result">
             <p>4. Удаление записи</p>
             @using (Html.BeginForm("Delete", "DataRecipe"))
@@ -44,8 +44,8 @@
                 <input type="text" name="recipeName" placeholder="название рецепта"/>
                 <input type="submit"/>
             }
-        </div>    
-        
+        </div>
+
         <div class="result">
             <p>5. Создание записи</p>
             @using (Html.BeginForm("Edit", "DataRecipe"))
@@ -55,15 +55,23 @@
                 <input type="submit"/>
                 <p>Вводите данные о ингридиентах чере ";" в формате название;сколько_грамм;название;сколько_грамм </p>
             }
-        </div>              
-        
-        
+        </div>
+
+
         <div class="result">
             @model ResultViewModel
             @if (Model != null)
             {
-                <p>Результат работы метода</p>
-                <pre>@Model.Result</pre>
+                if (!string.IsNullOrEmpty(Model.Error))
+                {
+                    <p>Работы метода завершилась с ошибкой</p>
+                    <pre>@Model.Error</pre>
+                }
+                else
+                {
+                    <p>Результат работы метода</p>
+                    <pre>@Model.Result</pre>
+                }
             }
         </div>
 

@@ -20,7 +20,7 @@ namespace CalorieContent.Repositories.Ingredient
 
         public Domain.Entities.Ingredient Get(string name)
         {
-            _storage.TryGetString(IngredientDB, name, out var value);
+            _storage.GetString(IngredientDB, name, out var value);
 
             return IngredientMapper.StringToIngredient(name, value);
         }
