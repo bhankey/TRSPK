@@ -1,6 +1,7 @@
 using CalorieContent.lib.KeyValueStorage;
 using CalorieContent.Repositories.Ingredient;
 using CalorieContent.Repositories.Recipe;
+using CalorieContent.Services.Ingredient;
 using CalorieContent.Services.Recipe;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -27,9 +28,9 @@ namespace WebMVC
             var recipeRepo = new RecipeRepo(s);
             var ingredientRepo = new IngredientRepo(s);
             
-            var recipeService = new RecipeService(recipeRepo, ingredientRepo);
-            
             services.AddTransient(typeof(IRecipeService), p => new RecipeService(recipeRepo, ingredientRepo));
+
+            services.AddTransient(typeof(IIngredientService), p => new IngredientService(ingredientRepo));
             
             services.AddControllersWithViews();
         }
