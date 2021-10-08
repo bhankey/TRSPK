@@ -1,11 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Threading;
 
 namespace Task4_5
 {
     class KeyBoardManager
     {
-        public delegate void KeyPressdEvent();
+        public delegate void KeyPressdEvent(ConsoleKeyInfo key);
 
         public event KeyPressdEvent Key3 = delegate { };
         public event KeyPressdEvent Key5 =  delegate { };
@@ -36,19 +38,19 @@ namespace Task4_5
 
                     if (key.Key == ConsoleKey.D3)
                     {
-                        Key3();
+                        Key3(key);
                     }
                     else if (key.Key == ConsoleKey.D5)
                     {
-                        Key5();
+                        Key5(key);
                     }
 
                     if (DigitKey.TryGetValue(key.Key, out bool _))
                     {
-                        Digit();
+                        Digit(key);
                     }
 
-                    AnyKey();
+                    AnyKey(key);
                 }
             } while (Console.ReadKey(true).Key != ConsoleKey.Escape);
         }
@@ -57,7 +59,7 @@ namespace Task4_5
 
     class ThreeSubscriber
     {
-        public void Message()
+        public void Message(ConsoleKeyInfo _)
         {
             Console.WriteLine("Button 3 pressed");
         }
@@ -66,7 +68,7 @@ namespace Task4_5
 
     class FiveSubscriber
     {
-        public void Message()
+        public void Message(ConsoleKeyInfo _)
         {
             Console.WriteLine("Button 5 pressed");
         }
@@ -74,17 +76,20 @@ namespace Task4_5
 
     class DigitSubscriber
     {
-        public void Message()
+        public void Message(ConsoleKeyInfo key)
         {
-            Console.WriteLine("DigitButton pressed");
+            Console.WriteLine($"This digitButton pressed: {key.KeyChar}");
         }
     }
     
     class LogSubscriber
     {
-        public void Message()
+        public void Message(ConsoleKeyInfo key)
         {
-            Console.WriteLine("Button pressed");
+            Console.WriteLine($"This button was pressed: {key.KeyChar}");
+            var streamWriter = File.AppendText("./keyLogger");
+            streamWriter.WriteLine($"{key.KeyChar} was pressed");
+            streamWriter.Close();
         }
     }
     
