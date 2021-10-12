@@ -42,5 +42,3 @@ class Program
     }
 
 }
-// https://coderoad.ru/8054471/#42564901 - прототип
-// https://coderoad.ru/8054471/#44751986 - объяснение
