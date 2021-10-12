@@ -7,7 +7,6 @@ public class Program
    {
       DateTime localDate = DateTime.Now;
 
-      //https://www.venea.net/web/culture_code
       String[] cultureNames = { "en-US", "en-GB", "fr-FR",
                                 "de-DE", "ru-RU", "tk-TM" } ;
 
