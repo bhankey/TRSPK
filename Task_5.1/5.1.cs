@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 namespace S
 {
 	class Program
@@ -22,6 +22,10 @@ namespace S
 			Console.WriteLine("{0:###.000}", digit);
 			Console.Write("формат с символами E+0: ");
 			Console.WriteLine("{0:000E+000}", digit);
+			var now = DateTime.Now;
+			Console.WriteLine("F: " + now.ToString("F"));
+			Console.WriteLine("O: {0:O}", now);
+			Console.WriteLine("R: {0:R}", now);
 		}
 	}
 }
