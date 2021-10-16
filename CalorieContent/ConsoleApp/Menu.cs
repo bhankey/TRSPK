@@ -199,6 +199,7 @@ namespace ConsoleApp
                 Console.WriteLine("1) Работа с бизнес логикой");
                 Console.WriteLine("2) Работа с данными об ингридиентах");
                 Console.WriteLine("3) Работа с данными о рецептах");
+                Console.WriteLine("Escape для выхода");
 
                 var key = Console.ReadKey();
                 char ch = key.KeyChar;
