@@ -46,6 +46,8 @@ namespace WebMVC.Controllers
                     builder.Append("\t" + ingredient.Name + " : " +
                                    ingredient.Grams.ToString() + "г\n");
                 }
+                
+                result.Result = builder.ToString();
             }
             catch (Exception e)
             {
