@@ -40,7 +40,7 @@ namespace WebMVC.Controllers
 
                 var builder = new StringBuilder();
                 builder.Append("Название рецепта: " + recipe.Name + "\n");
-                builder.Append("Ингридиенты:\n");
+                builder.Append("Ингредиенты:\n");
                 foreach (var ingredient in recipe.Ingredients)
                 {
                     builder.Append("\t" + ingredient.Name + " : " +
@@ -69,7 +69,7 @@ namespace WebMVC.Controllers
                 foreach (var recipe in recipes)
                 {
                     builder.Append("Название рецепта: " + recipe.Key + "\n");
-                    builder.Append("Ингридиенты:\n");
+                    builder.Append("Ингредиенты:\n");
                     foreach (var ingredient in recipe.Value.Ingredients)
                     {
                         builder.Append("\t" + ingredient.Name + " : " +
