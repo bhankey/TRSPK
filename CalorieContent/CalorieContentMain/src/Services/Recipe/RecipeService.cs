@@ -30,6 +30,16 @@ namespace CalorieContent.Services.Recipe
 
         public void Set(Domain.Entities.Recipe entity)
         {
+            var ingredients = _ingredientRepo.GetAll();
+
+            foreach (var ingredient in entity.Ingredients)
+            {
+                if (!ingredients.ContainsKey(ingredient.Name))
+                {
+                    throw new Exception($"Firstly add ingredients for this recipe: {ingredient.Name}");
+                }
+            }
+
             _recipeRepo.Set(entity);
         }
 
