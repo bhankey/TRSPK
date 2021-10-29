@@ -159,7 +159,7 @@ namespace ConsoleApp
                     Console.WriteLine("Введите название рецепта: ");
                     var ingredient = Console.ReadLine() ?? String.Empty;
                     
-                    Console.WriteLine("Введите название ингредиентов через запятую: ");
+                    Console.WriteLine("Вводите данные о ингридиентах чере \";\" в формате название;сколько_грамм;название;сколько_грамм ");
                     var calorie = Console.ReadLine() ?? String.Empty;
                     
 
@@ -177,7 +177,7 @@ namespace ConsoleApp
                     Console.WriteLine("Введите название рецепта: ");
                     ingredient = Console.ReadLine() ?? String.Empty;
                     
-                    Console.WriteLine("Введите название ингредиентов через запятую: ");
+                    Console.WriteLine("Вводите данные о ингридиентах чере \";\" в формате название;сколько_грамм;название;сколько_грамм ");
                     calorie = Console.ReadLine() ?? String.Empty;
                     
 
